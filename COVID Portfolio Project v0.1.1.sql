@@ -60,12 +60,9 @@ SELECT Location, date, total_cases, new_cases, total_deaths, population
 FROM covidDeaths$
 ORDER BY 1,2;
 
-
-
-	
-
 --Looking at Total Cases vs Total Deaths
 --Infection-Death ration
+
 SELECT Location, date,  total_cases, total_deaths, CAST((total_deaths/total_cases)*100 AS DECIMAL(4,2)) AS "Infection/Death ratio"
 FROM covidDeaths$
 WHERE (total_deaths IS NOT NULL OR total_cases IS NOT NULL) AND location LIKE 'venezuela'
@@ -87,7 +84,7 @@ ORDER BY 4 DESC
 SELECT location, MAX(total_deaths) AS 'Death Count'
 FROM covidDeaths$
 --WHERE location NOT IN('World', 'High Income','Upper middle income','Lower middle income', 'European Union', 'Europe', 'North America', 'Asia', 'South America')
-WHERE continent IS NOT NULL
+WHERE continent IS NOT NULL --This is much more efficient and user friendly than the above snippet.
 GROUP BY location
 ORDER BY 'Death Count' DESC
 
@@ -101,7 +98,7 @@ GROUP BY location
 ORDER BY 'Death Count'  DESC
 
 
---Global nunmbers
+-- LOOKING AT GLOBAL NUMBERS
 
 SELECT /*date,*/ SUM(new_cases) AS Glb_newCases, SUM(new_deaths) AS Glb_newDeaths, (SUM(new_deaths)/SUM(new_cases))*100 AS 'Global Death ratio'
 FROM covidDeaths$
@@ -220,8 +217,7 @@ ORDER BY 1,2
 --ALTER COLUMN 	
 --	[excess_mortality_cumulative_per_million] float;
 
--- Joining the sets
-
+-- JOINING THE TWO DATASETS
 
 --Looking at total population vaccinations
 SELECT cD.continent, cD.location, cD.date, cD. population, cV.new_vaccinations
